@@ -1,12 +1,12 @@
 /**
  * 
  */
-package preprocess;
+package models;
 
 /**
  * @author louissmit
  *
  */
-public class PPRunner {
+public class Query {
 
 }

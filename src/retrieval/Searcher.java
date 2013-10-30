@@ -7,6 +7,6 @@ package retrieval;
  * @author louissmit
  *
  */
-public class RetrievalRunner {
+public class Searcher {
 
 }

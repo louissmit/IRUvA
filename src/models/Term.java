@@ -8,5 +8,7 @@ package models;
  *
  */
 public class Term {
+	
+	private double weight;
 
 }
