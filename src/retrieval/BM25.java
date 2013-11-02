@@ -1,6 +1,13 @@
 package retrieval;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class BM25 {
@@ -9,11 +16,14 @@ public class BM25 {
 	public static final float b = 0.75f;
 	
 	
-	public static TreeMap <Double, String> getRanking(String [] query, HashMap <String, TreeMap <String, Integer>> invIndex, HashMap <String, Integer> docList, double avgdl){
+	public static HashMap <String, Double> getRanking(String [] query, HashMap <String, TreeMap <String, Integer>> invIndex, HashMap <String, Integer> docList, double avgdl){
 		
-		TreeMap <Double, String> rank = new TreeMap <Double, String>();
+		HashMap <String, Double> rank = new HashMap <String, Double>();
 		double score = 0;
+		
+		
 		for(String doc: docList.keySet()){
+		
 			score = 0;
 			int dLength = docList.get(doc);
 			
@@ -23,12 +33,41 @@ public class BM25 {
 				int fqd = invIndex.get(term).get(doc);
 			   score += (fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
 			}
-			
-		rank.put(score, doc);
+			if (score == 0) continue;
+		rank.put(doc, score);
 		}
 		
-		return rank;
+		return sort(rank);
 		
+	}
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	private static HashMap <String, Double> sort(HashMap <String, Double> unsortMap) {
+		 
+	
+		List  list = new LinkedList (unsortMap.entrySet());
+		
+		
+ 
+		// sort list based on comparator
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue())
+                                       .compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+ 
+		// put sorted list into map again
+                //LinkedHashMap make sure order in which keys were inserted
+		HashMap sortedMap = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		return sortedMap;
 	}
 
 }

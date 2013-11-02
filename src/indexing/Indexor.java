@@ -46,6 +46,8 @@ public class Indexor {
 				
 		File folder = new File("src/Docs");
 		File[] listOfFiles = folder.listFiles();
+		
+		System.out.println(listOfFiles.length);
 	   
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
@@ -69,6 +71,7 @@ public class Indexor {
 			    	}
 			    }
 		    }
+		    
 		    
 		    
 		}

@@ -17,12 +17,12 @@ public class Main {
 		double avgdl = ind.getAvgLength();
 		HashMap <String, Integer> docList = ind.getDocList();
 		String [] query = {"think", "adwadwa"};
-		TreeMap <Double, String> rank = BM25.getRanking(query, invIndex, docList, avgdl);
+		HashMap <String, Double> rank = BM25.getRanking(query, invIndex, docList, avgdl);
 		
 		String ranking = "";
 		
-		for(double score: rank.keySet()){
-			ranking = "Document: "+rank.get(score)+ ", Score : "+ score +"\n"+ranking;
+		for(String document: rank.keySet()){
+			ranking = "Document: "+document+ ", Score : "+ rank.get(document) +"\n"+ranking;
 		}
 		
 		System.out.println(ranking);
