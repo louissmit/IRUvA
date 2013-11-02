@@ -5,19 +5,45 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import tokenize.Tokenizer;
+import preprocess.Tokenizer;
 
 
 public class Indexor {
 	
+	private HashMap <String, Integer> docList = new HashMap <String, Integer> (); // documentID, number of terms in the document;
+	private HashMap <String, TreeMap <String, Integer>> invIndex = new HashMap <String, TreeMap <String, Integer>> ();
+	HashMap <String, Integer> counts = null;
+	private double avgLength = 0; // average lenght of the documents in the collecton
 	
+	public double getAvgLength() {
+		return avgLength;
+	}
+
+	public void setAvgLength(double avgLength) {
+		this.avgLength = avgLength;
+	}
+
+	public HashMap<String, Integer> getDocList() {
+		return docList;
+	}
+
+	public void setDocList(HashMap<String, Integer> docList) {
+		this.docList = docList;
+	}
+
+	public HashMap<String, TreeMap<String, Integer>> getInvIndex() {
+		return invIndex;
+	}
+
+	public void setInvIndex(HashMap<String, TreeMap<String, Integer>> invIndex) {
+		this.invIndex = invIndex;
+	}
+
+	public  HashMap <String, TreeMap <String, Integer>> makeIndex(){
+		
 	
-	public static HashMap <String, TreeMap <String, Integer>> makeIndex(){
-		
-		
-		HashMap <String, TreeMap <String, Integer>> invIndex = new HashMap <String, TreeMap <String, Integer>> ();
-		HashMap <String, Integer> counts = null;
-		
+		int sum = 0 ;//to calculate the average length
+				
 		File folder = new File("src/Docs");
 		File[] listOfFiles = folder.listFiles();
 	   
@@ -27,8 +53,11 @@ public class Indexor {
 		    	Tokenizer t = new Tokenizer();
 		    	counts = t.tokenize(file.getName());
 		    	
+		    	sum += counts.size();
+		    	
 		    	String docName = file.getName().substring(0, file.getName().length() - 4);
 		    	
+		    	docList.put(docName, counts.size());
 		    	
 		    	for(String token : counts.keySet()){
 			    	if(!invIndex.containsKey(token)){
@@ -44,7 +73,9 @@ public class Indexor {
 		    
 		}
 		
-		for(String token: invIndex.keySet()){
+		avgLength = sum / listOfFiles.length;
+		
+		/*for(String token: invIndex.keySet()){
 			
 			System.out.println(token+":");
 			
@@ -54,7 +85,7 @@ public class Indexor {
 			
 			System.out.println("");
 			
-		}
+		}*/
 		
 		return invIndex;
 	}
