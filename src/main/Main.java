@@ -3,6 +3,8 @@ package main;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import models.IQuery;
+import models.StringQuery;
 import retrieval.BM25;
 import indexing.Indexor;
 
@@ -16,7 +18,8 @@ public class Main {
 		HashMap <String, TreeMap <String, Integer>> invIndex = ind.makeIndex();
 		double avgdl = ind.getAvgLength();
 		HashMap <String, Integer> docList = ind.getDocList();
-		String [] query = {"think", "adwadwa"};
+		String [] queryStrings= {"think", "adwadwa"};
+		IQuery query=new StringQuery(queryStrings);
 		HashMap <String, Double> rank = BM25.getRanking(query, invIndex, docList, avgdl);
 		
 		String ranking = "";
