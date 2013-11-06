@@ -3,10 +3,12 @@ package main;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
+
 import models.IQuery;
 import models.StringQuery;
 import retrieval.BM25;
-import indexing.Indexor;
+import indexing.*;
 
 public class Main {
 
@@ -29,6 +31,10 @@ public class Main {
 		}
 		
 		System.out.println(ranking);
+		System.out.println("Statistics:");
+		System.out.println(StatisticsTest.numberOfTokens(invIndex));
+		System.out.println(StatisticsTest.numberOfUniqueTokens(invIndex));
+		System.out.println(StatisticsTest.numberOfOccurences(invIndex, "of"));
 		
 	/*for(String token: invIndex.keySet()){
 			
