@@ -8,6 +8,7 @@ import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
 import models.IQuery;
 import models.StringQuery;
 import retrieval.BM25;
+import retrieval.IRetrievalModel;
 import indexing.*;
 
 public class Main {
@@ -22,7 +23,8 @@ public class Main {
 		HashMap <String, Integer> docList = ind.getDocList();
 		String [] queryStrings= {"think", "adwadwa"};
 		IQuery query=new StringQuery(queryStrings);
-		HashMap <String, Double> rank = BM25.getRanking(query, invIndex, docList, avgdl);
+		IRetrievalModel retrevalModel=new BM25();
+		HashMap <String, Double> rank = retrevalModel.getRanking(query, invIndex, docList, avgdl);
 		
 		String ranking = "";
 		
