@@ -34,7 +34,7 @@ public class BM25 implements IRetrievalModel{
 				if(!invIndex.containsKey(term)) continue;
 				if(!invIndex.get(term).containsKey(doc)) continue;
 				int fqd = invIndex.get(term).get(doc);
-			   score += (fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
+			   score += Math.log((docList.size()-invIndex.get(term).size()+0.5)/(invIndex.get(term).size()+0.5))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
 			}
 			if (score == 0) continue;
 		rank.put(doc, score);

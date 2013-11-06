@@ -20,15 +20,17 @@ public class Tokenizer {
 		  try {
 		    FileReader reader = new FileReader(file);
 		    BufferedReader buffReader = new BufferedReader(reader);
-		    int x = 0;
+		    
 		    String s;
 		  
 		    while((s = buffReader.readLine()) != null){
 		    	s = Normalizer.normalize(s, Normalizer.Form.NFD); 
 		    	s = s.replaceAll("[^\\p{ASCII}]", "");//removing diatrics
 		        lines.add(s.toLowerCase());
-		        x++;
+		     
 		    }
+		    
+		    buffReader.close();
 		 }
 		  catch(IOException e){
 		    System.exit(0);
