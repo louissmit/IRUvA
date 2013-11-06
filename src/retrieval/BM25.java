@@ -12,13 +12,13 @@ import java.util.TreeMap;
 
 import models.IQuery;
 
-public class BM25 {
+public class BM25 implements IRetrievalModel{
 	
-	public static final float k1 = 1.5f;
-	public static final float b = 0.75f;
+	public final float k1 = 1.5f;
+	public final float b = 0.75f;
 	
 	
-	public static HashMap <String, Double> getRanking(IQuery queryObject, HashMap <String, TreeMap <String, Integer>> invIndex, HashMap <String, Integer> docList, double avgdl){
+	public HashMap <String, Double> getRanking(IQuery queryObject, HashMap <String, TreeMap <String, Integer>> invIndex, HashMap <String, Integer> docList, double avgdl){
 		
 		String [] query=queryObject.getQuery();
 		HashMap <String, Double> rank = new HashMap <String, Double>();
