@@ -39,15 +39,15 @@ public class Indexor {
 		this.invIndex = invIndex;
 	}
 
-	public  HashMap <String, TreeMap <String, Integer>> makeIndex(){
+	public  HashMap <String, TreeMap <String, Integer>> makeIndex(String path){
 		
 	
 		int sum = 0 ;//to calculate the average length
 				
-		File folder = new File("src/Docs");
+		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		
-		System.out.println(listOfFiles.length);
+		System.out.println("Loaded "+listOfFiles.length+" files.");
 	   
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {

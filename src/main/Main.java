@@ -9,34 +9,48 @@ import models.IQuery;
 import models.StringQuery;
 import retrieval.BM25;
 import retrieval.IRetrievalModel;
+import retrieval.QueryProcessing;
 import indexing.*;
 
 public class Main {
 
+	public static String docPath="src/Docs";
 	
 	public static void main(String[] args) {
 		
-		Indexor ind = new Indexor();
+		String line="ustainable ecosystems";
+		String [] queryStrings= line.split(" ");
+		String queryId="6";
+		IQuery query6=new StringQuery(queryStrings,queryId);
 		
-		HashMap <String, TreeMap <String, Integer>> invIndex = ind.makeIndex();
-		double avgdl = ind.getAvgLength();
-		HashMap <String, Integer> docList = ind.getDocList();
-		String [] queryStrings= {"think", "adwadwa"};
-		IQuery query=new StringQuery(queryStrings);
-		IRetrievalModel retrevalModel=new BM25();
-		HashMap <String, Double> rank = retrevalModel.getRanking(query, invIndex, docList, avgdl);
+		line="air guitar textile sensors";
+		queryStrings= line.split(" ");
+		queryId="7";
+		IQuery query7=new StringQuery(queryStrings,queryId);
+		
+		IRetrievalModel retrievalModel=new BM25();
+		QueryProcessing queryProcessing=new QueryProcessing(retrievalModel, docPath);
+		
+		HashMap <String, Double> rank6 = queryProcessing.CalculateAndSaveToFileRank(query6, "output6.txt");
+		HashMap <String, Double> rank7 = queryProcessing.CalculateAndSaveToFileRank(query7, "output7.txt");
+
 		
 		String ranking = "";
-		
-		for(String document: rank.keySet()){
-			ranking = "Document: "+document+ ", Score : "+ rank.get(document) +"\n"+ranking;
+		for(String document: rank6.keySet()){
+			ranking += "Document: "+document+ ", Score : "+ rank6.get(document) +"\n";
 		}
-		
+		System.out.println("Statistic for query 6:");
 		System.out.println(ranking);
-		System.out.println("Statistics:");
-		System.out.println(StatisticsTest.numberOfTokens(invIndex));
-		System.out.println(StatisticsTest.numberOfUniqueTokens(invIndex));
-		System.out.println(StatisticsTest.numberOfOccurences(invIndex, "of"));
+		
+		ranking = "";		
+		for(String document: rank7.keySet()){
+			ranking += "Document: "+document+ ", Score : "+ rank7.get(document) +"\n";
+		}
+		System.out.println("Statistic for query 7:");
+		System.out.println(ranking);
+		
+		queryProcessing.PrintStatistics();
+		
 		
 	/*for(String token: invIndex.keySet()){
 			

@@ -34,7 +34,8 @@ public class BM25 implements IRetrievalModel{
 				if(!invIndex.containsKey(term)) continue;
 				if(!invIndex.get(term).containsKey(doc)) continue;
 				int fqd = invIndex.get(term).get(doc);
-			   score += Math.log((docList.size()-invIndex.get(term).size()+0.5)/(invIndex.get(term).size()+0.5))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
+			    //score += Math.log((docList.size()-invIndex.get(term).size()+0.5)/(invIndex.get(term).size()+0.5))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
+				score += Math.log((docList.size())/(invIndex.get(term).size()))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
 			}
 			if (score == 0) continue;
 		rank.put(doc, score);
@@ -58,8 +59,8 @@ public class BM25 implements IRetrievalModel{
 		// sort list based on comparator
 		Collections.sort(list, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((Comparable) ((Map.Entry) (o1)).getValue())
-                                       .compareTo(((Map.Entry) (o2)).getValue());
+				return ((Comparable) ((Map.Entry) (o2)).getValue())
+                                       .compareTo(((Map.Entry) (o1)).getValue());
 			}
 		});
  
