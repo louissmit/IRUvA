@@ -42,9 +42,9 @@ public class ParsimLM implements IRetrievalModel{
 		
 		for(String doc: docList.keySet()){
 			
-			for (String term: query){
-				StatisticsTest
-			}
+			//for (String term: query){
+			//	StatisticsTest
+			//}
 			
 		}
 		
