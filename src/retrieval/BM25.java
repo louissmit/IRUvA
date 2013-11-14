@@ -34,8 +34,8 @@ public class BM25 implements IRetrievalModel{
 				if(!invIndex.containsKey(term)) continue;
 				if(!invIndex.get(term).containsKey(doc)) continue;
 				int fqd = invIndex.get(term).get(doc);
-			    //score += Math.log((docList.size()-invIndex.get(term).size()+0.5)/(invIndex.get(term).size()+0.5))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
-				score += Math.log((docList.size())/(invIndex.get(term).size()))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl)));
+			    //score += Math.log((docList.size()-invIndex.get(term).size()+0.5)/(invIndex.get(term).size()+0.5))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl))); //from wikipedia
+				score += Math.log((docList.size())/(invIndex.get(term).size()))*(fqd*(k1+1))/(fqd+k1*(1-b+b*(dLength/avgdl))); // from lectures slides
 			}
 			if (score == 0) continue;
 		rank.put(doc, score);
