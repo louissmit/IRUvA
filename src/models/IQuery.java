@@ -10,5 +10,6 @@ package models;
  */
 public interface IQuery {
 	String[] getQuery();
+	String getQueryID();
 
 }
