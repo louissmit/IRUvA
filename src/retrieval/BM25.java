@@ -49,7 +49,7 @@ public class BM25 implements IRetrievalModel{
 	
 	
 	@SuppressWarnings("unchecked")
-	private static HashMap <String, Double> sort(HashMap <String, Double> unsortMap) {
+	public static HashMap <String, Double> sort(HashMap <String, Double> unsortMap) {
 		 
 	
 		List  list = new LinkedList (unsortMap.entrySet());

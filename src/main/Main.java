@@ -9,6 +9,7 @@ import models.IQuery;
 import models.StringQuery;
 import retrieval.BM25;
 import retrieval.IRetrievalModel;
+import retrieval.ParsimLM;
 import retrieval.QueryProcessing;
 import indexing.*;
 
@@ -29,10 +30,15 @@ public class Main {
 		IQuery query7=new StringQuery(queryStrings,queryId);
 		
 		IRetrievalModel retrievalModel=new BM25();
+        IRetrievalModel retrievalModelLM=new ParsimLM();
 		QueryProcessing queryProcessing=new QueryProcessing(retrievalModel, docPath);
+        QueryProcessing queryProcessingLM=new QueryProcessing(retrievalModelLM, docPath);
 		
 		HashMap <String, Double> rank6 = queryProcessing.CalculateAndSaveToFileRank(query6, "output6.txt");
 		HashMap <String, Double> rank7 = queryProcessing.CalculateAndSaveToFileRank(query7, "output7.txt");
+
+        HashMap <String, Double> rank6LM = queryProcessingLM.CalculateAndSaveToFileRank(query6, "output6LM.txt");
+        HashMap <String, Double> rank7LM = queryProcessingLM.CalculateAndSaveToFileRank(query7, "output7LM.txt");
 
 		
 		String ranking = "";
