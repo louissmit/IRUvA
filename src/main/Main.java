@@ -20,7 +20,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		String line="ustainable ecosystems";
+		String line="sustainable ecosystems";
 		String [] queryStrings= line.split(" ");
 		String queryId="6";
 		IQuery query6=new StringQuery(queryStrings,queryId);
