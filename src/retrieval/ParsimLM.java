@@ -8,47 +8,112 @@ import models.IQuery;
 
 public class ParsimLM implements IRetrievalModel{
 	
-	double lambda = 0.2;
+	private double lambda = 0.2;
+    private HashMap <String, Double> PtC = new HashMap <String, Double>();//key: term
+    private HashMap <String, HashMap<String,Double>> PtD = new HashMap <String, HashMap<String,Double>>();// key: document,
+    //value: term and probability value
+    private HashMap<String, HashMap<String,Double>> Et=new HashMap<String, HashMap<String,Double>>();// key: document,
+    //value: term and probability value
+    private HashMap<String, TreeMap<String, Integer>> invIndex=new HashMap<String, TreeMap<String, Integer>>();//key: term
+    //value: doc and occurrences
+    public static int maxNumberOfIterations=5;
 
 	@Override
 	public HashMap<String, Double> getRanking(IQuery queryObject,
-			HashMap<String, TreeMap<String, Integer>> invIndex,
+			HashMap<String, TreeMap<String, Integer>> _invIndex,
 			HashMap<String, Integer> docList, double avgdl) {
+
 		
-		String [] query=queryObject.getQuery();
-		
-		HashMap <String, Double> rank = new HashMap <String, Double>();
-		double score = 0;
-		
-		int csum = 0; //occurrecies of all the terms in the collection
-		int [] qsum = new int[query.length];
+		double csum = 0; //occurrecies of all the terms in the collection
+		HashMap<String,Double> qsum = new HashMap<String, Double>();
+        this.invIndex=_invIndex;
 		
 		for(String doc: docList.keySet()){
-			int i = 0;
-			for(String term: query){
+            double sum=0;
+			for(String term: invIndex.keySet())
+            {
 				if(!invIndex.containsKey(term)) continue;
 				if(!invIndex.get(term).containsKey(doc)) continue;
 				int x = invIndex.get(term).get(doc);
 				csum += x;
-				qsum[i] += x;
-				i++;
+				sum += x;
 			}
+            qsum.put(doc,sum);
 		}
-		
-		
-		//calculate the probabilities P(t|D) for each document
-		
-		double [] ptd = new double[docList.size()];
-		
-		for(String doc: docList.keySet()){
-			
-			//for (String term: query){
-			//	StatisticsTest
-			//}
-			
-		}
-		
-		return null;
+
+        for(String doc: docList.keySet()){
+            double sum=0;
+            PtD.put(doc,new HashMap<String, Double>());
+            Et.put(doc,new HashMap<String, Double>());
+            for(String term: invIndex.keySet())
+            {
+                if(!invIndex.containsKey(term)) continue;
+                if(!invIndex.get(term).containsKey(doc)) continue;
+                int tf = invIndex.get(term).get(doc);
+                double probabilityD=(double)tf/qsum.get(doc);
+                double probabilityC=(double)tf/csum;
+                PtC.put(term,probabilityC);
+                PtD.get(doc).put(term,probabilityD);
+            }
+            qsum.put(doc,sum);
+        }
+        for(int i=0;i<maxNumberOfIterations;i++)
+        {
+            this.CalculateEStep();
+            this.CalculateMStep();
+        }
+
+		return MakeRanking(queryObject);
+
 	}
+
+    private HashMap<String,Double> MakeRanking(IQuery queryObject)
+    {
+        String [] query=queryObject.getQuery();
+        HashMap<String,Double> result=new HashMap<String, Double>();
+
+        for(String doc:PtD.keySet())
+        {
+            double score=1.0;
+            for(String term:query)
+            {
+                if(PtD.get(doc).containsKey(term)&&PtC.containsKey(term))
+                    score*=( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
+            }
+            if(score!=1.0)
+                result.put(doc,score);
+        }
+        return BM25.sort(result);
+    }
+
+    private void CalculateEStep()
+    {
+        for(String doc:this.Et.keySet())
+        {
+            for(String term:this.Et.get(doc).keySet())
+            {
+                double result=this.invIndex.get(doc).get(term)*( lambda*PtD.get(doc).get(term) ) / ( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
+                this.Et.get(doc).put(term,result);
+            }
+        }
+    }
+
+    private void CalculateMStep()
+    {
+        double sum=0;
+        for(String doc:this.Et.keySet())
+        {
+            for(String term:this.Et.get(doc).keySet())
+            {
+                 sum+=this.Et.get(doc).get(term);
+            }
+            for(String term:this.Et.get(doc).keySet())
+            {
+                double newResult=Et.get(doc).get(term)/sum;
+                this.PtD.get(doc).put(term,newResult);
+            }
+        }
+    }
+
 
 }

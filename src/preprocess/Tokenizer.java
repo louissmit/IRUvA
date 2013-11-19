@@ -35,7 +35,7 @@ public class Tokenizer {
 		  catch(IOException e){
 		    System.exit(0);
 		}
-		String OPERATORS = " \":()/<>?-_.:;,+*°€'";
+		String OPERATORS = " \\\":()/<>?-_.:;,+*Â°â‚¬'";
 
 		for (String st : lines) {
 		    StringTokenizer tokens = new StringTokenizer(st, OPERATORS, true);
