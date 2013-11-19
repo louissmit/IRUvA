@@ -3,6 +3,8 @@ package main;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import preprocess.Preprocessor;
+
 import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
 
 import evaluation.Evaluator;
@@ -10,9 +12,7 @@ import models.IQuery;
 import models.StringQuery;
 import retrieval.BM25;
 import retrieval.IRetrievalModel;
-
 import retrieval.ParsimLM;
-
 import retrieval.QueryProcessing;
 import indexing.*;
 
@@ -22,20 +22,19 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-
+		Preprocessor p = new Preprocessor();
+		
 		String line="sustainable ecosystems";
-
-		String [] queryStrings= line.split(" ");
+		String [] queryStrings= p.preprocessQuery(line);
 		String queryId="6";
 		IQuery query6=new StringQuery(queryStrings,queryId);
 		
 		line="air guitar textile sensors";
-		queryStrings= line.split(" ");
+		queryStrings= p.preprocessQuery(line);
 		queryId="7";
 		IQuery query7=new StringQuery(queryStrings,queryId);
 		
 		IRetrievalModel retrievalModel=new BM25();
-
         IRetrievalModel retrievalModelLM=new ParsimLM();
 		QueryProcessing queryProcessing=new QueryProcessing(retrievalModel, docPath);
         QueryProcessing queryProcessingLM=new QueryProcessing(retrievalModelLM, docPath);
@@ -47,15 +46,12 @@ public class Main {
         HashMap <String, Double> rank7LM = queryProcessingLM.CalculateAndSaveToFileRank(query7, "output7LM.txt");
 
         Evaluator eval = new Evaluator("qrels.txt");
-
 		String ranking = "";
 		for(String document: rank6.keySet()){
 			ranking += "Document: "+document+ ", Score : "+ rank6.get(document) +"\n";
 		}
 		System.out.println("Statistic for query 6:");
-
         System.out.println("precision at 30: " + eval.getPrecisionAt(30, query6.getQueryID(), rank6));
-
 		System.out.println(ranking);
 		
 		ranking = "";		
@@ -63,9 +59,7 @@ public class Main {
 			ranking += "Document: "+document+ ", Score : "+ rank7.get(document) +"\n";
 		}
 		System.out.println("Statistic for query 7:");
-
         System.out.println("precision at 30: " + eval.getPrecisionAt(30, query7.getQueryID(), rank7));
-
 		System.out.println(ranking);
 		
 		queryProcessing.PrintStatistics();
