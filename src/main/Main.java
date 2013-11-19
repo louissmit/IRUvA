@@ -59,6 +59,9 @@ public class Main {
 		System.out.println(ranking);
 		
 		queryProcessing.PrintStatistics();
+
+        System.out.println("Precision for query 6 for BM25, top20: "+eval.getPrecisionAt(20,query6.getQueryID(),rank6));
+        System.out.println("Precision for query 6 for LM, top20: "+eval.getPrecisionAt(20,query6.getQueryID(),rank6LM));
 		
 		
 	/*for(String token: invIndex.keySet()){

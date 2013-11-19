@@ -50,7 +50,7 @@ public class Evaluator {
         int relevant = 0;
         HashMap<String, Integer> qrelsForQ = qrels.get(queryId);
         for(String docName: rank.keySet()) {
-            if(qrelsForQ.get(docName) == 1) relevant++;
+            if(qrelsForQ.containsKey(docName) && qrelsForQ.get(docName) == 1) relevant++;
             i++;
             if(i == k) break;
         }
