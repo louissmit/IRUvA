@@ -16,7 +16,9 @@ public class ParsimLM implements IRetrievalModel{
     //value: term and probability value
     private HashMap<String, TreeMap<String, Integer>> invIndex=new HashMap<String, TreeMap<String, Integer>>();//key: term
     //value: doc and occurrences
-    public static int maxNumberOfIterations=5;
+    public static int maxNumberOfIterations=100;
+    private static double threshold=0.0001;
+    private double currentMaxDiff=2*threshold;
 
 	@Override
 	public HashMap<String, Double> getRanking(IQuery queryObject,
@@ -58,6 +60,8 @@ public class ParsimLM implements IRetrievalModel{
         }
         for(int i=0;i<maxNumberOfIterations;i++)
         {
+            if(this.currentMaxDiff<threshold)
+                break;
             this.CalculateEStep();
             this.CalculateMStep();
         }
@@ -86,11 +90,11 @@ public class ParsimLM implements IRetrievalModel{
 
     private void CalculateEStep()
     {
-        for(String doc:this.Et.keySet())
+        for(String doc:this.PtD.keySet())
         {
-            for(String term:this.Et.get(doc).keySet())
+            for(String term:this.PtD.get(doc).keySet())
             {
-                double result=this.invIndex.get(doc).get(term)*( lambda*PtD.get(doc).get(term) ) / ( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
+                double result=this.invIndex.get(term).get(doc)*( lambda*PtD.get(doc).get(term) ) / ( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
                 this.Et.get(doc).put(term,result);
             }
         }
@@ -99,8 +103,11 @@ public class ParsimLM implements IRetrievalModel{
     private void CalculateMStep()
     {
         double sum=0;
+        double oldValue=0;
+        double maxDif=0;
         for(String doc:this.Et.keySet())
         {
+            sum=0;
             for(String term:this.Et.get(doc).keySet())
             {
                  sum+=this.Et.get(doc).get(term);
@@ -108,9 +115,13 @@ public class ParsimLM implements IRetrievalModel{
             for(String term:this.Et.get(doc).keySet())
             {
                 double newResult=Et.get(doc).get(term)/sum;
+                if(this.PtD.get(doc).containsKey(term))
+                    oldValue=this.PtD.get(doc).get(term);
+                maxDif=Math.max(maxDif,Math.abs(oldValue-newResult));
                 this.PtD.get(doc).put(term,newResult);
             }
         }
+        this.currentMaxDiff=maxDif;
     }
 
 
