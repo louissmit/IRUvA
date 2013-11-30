@@ -83,7 +83,7 @@ public class ParsimLM implements IRetrievalModel{
                     score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
             }
             if(score!=1.0)
-                result.put(doc,-score);
+                result.put(doc,score);
         }
         return BM25.sort(result);
     }
