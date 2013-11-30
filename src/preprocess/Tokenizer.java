@@ -11,6 +11,8 @@ import java.util.StringTokenizer;
 
 public class Tokenizer {
 	
+	Stemmer stemmer = new Stemmer();
+	
 	HashMap <String, Integer> list = new HashMap <String, Integer>(); 
 	
 	public HashMap <String, Integer> tokenize(String filename) {
@@ -44,6 +46,13 @@ public class Tokenizer {
 		        if (OPERATORS.contains(token))
 		        {}
 		        else{
+		        	stemmer = new Stemmer();
+		        	stemmer.add(token.toCharArray(), token.length());
+		        	stemmer.stem();
+		        	
+		        	token = stemmer.toString();
+		        	
+		        	
 		        	
 		        	if(!list.containsKey(token)){
 		        		list.put(token, 1);

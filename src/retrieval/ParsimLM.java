@@ -42,6 +42,7 @@ public class ParsimLM implements IRetrievalModel{
 			}
             qsum.put(doc,sum);
 		}
+
         for(String doc: docList.keySet()){
             double sum=0;
             PtD.put(doc,new HashMap<String, Double>());
@@ -67,6 +68,7 @@ public class ParsimLM implements IRetrievalModel{
         }
 
 		return MakeRanking(queryObject);
+
 	}
 
     private HashMap<String,Double> MakeRanking(IQuery queryObject)

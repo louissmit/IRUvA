@@ -3,6 +3,8 @@ package main;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import preprocess.Preprocessor;
+
 import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
 
 import evaluation.Evaluator;
@@ -20,13 +22,15 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
+		Preprocessor p = new Preprocessor();
+		
 		String line="sustainable ecosystems";
-		String [] queryStrings= line.split(" ");
+		String [] queryStrings= p.preprocessQuery(line);
 		String queryId="6";
 		IQuery query6=new StringQuery(queryStrings,queryId);
 		
 		line="air guitar textile sensors";
-		queryStrings= line.split(" ");
+		queryStrings= p.preprocessQuery(line);
 		queryId="7";
 		IQuery query7=new StringQuery(queryStrings,queryId);
 		
