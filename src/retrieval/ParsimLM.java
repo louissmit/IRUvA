@@ -1,16 +1,14 @@
 package retrieval;
 
-
 import java.util.*;
-import java.util.HashMap;
-import java.util.TreeMap;
 
+import indexing.Indexor.*;
 
 import models.IQuery;
 
 public class ParsimLM implements IRetrievalModel{
 	
-	private double lambda = 0.001;
+	private double lambda = 0.2;
     private HashMap <String, Double> PtC = new HashMap <String, Double>();//key: term
     private HashMap <String, HashMap<String,Double>> PtD = new HashMap <String, HashMap<String,Double>>();// key: document,
     //value: term and probability value
@@ -84,7 +82,7 @@ public class ParsimLM implements IRetrievalModel{
             for(String term:query)
             {
                 if(PtD.get(doc).containsKey(term)&&PtC.containsKey(term))
-                    score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
+                    score+=-(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
             }
             if(score!=0)
                 result.put(doc,score);
@@ -98,8 +96,7 @@ public class ParsimLM implements IRetrievalModel{
         {
             for(String term:this.PtD.get(doc).keySet())
             {
-                double result=this.invIndex.get(term).get(doc)*( lambda*PtD.get(doc).get(term) ) /
-                        ( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
+                double result=this.invIndex.get(term).get(doc)*( lambda*PtD.get(doc).get(term) ) / ( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
                 this.Et.get(doc).put(term,result);
             }
         }
@@ -107,7 +104,7 @@ public class ParsimLM implements IRetrievalModel{
 
     private void CalculateMStep()
     {
-        double sum;
+        double sum=0;
         double oldValue=0;
         double maxDif=0;
         for(String doc:this.Et.keySet())
