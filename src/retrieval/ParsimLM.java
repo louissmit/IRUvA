@@ -1,5 +1,6 @@
 package retrieval;
 
+import java.util.*;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -75,16 +76,16 @@ public class ParsimLM implements IRetrievalModel{
 
         for(String doc:PtD.keySet())
         {
-            double score=1.0;
+            double score=0;
             for(String term:query)
             {
                 if(PtD.get(doc).containsKey(term)&&PtC.containsKey(term))
                     score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
             }
-            if(score!=1.0)
+            if(score!=0)
                 result.put(doc, -score);
         }
-        return BM25.sort(result);
+        return ParsimLM.sort(result);
     }
 
     private void CalculateEStep()
@@ -122,6 +123,31 @@ public class ParsimLM implements IRetrievalModel{
             }
         }
         this.currentMaxDiff=maxDif;
+    }
+    
+    public static HashMap <String, Double> sort(HashMap <String, Double> unsortMap) {
+
+
+        List list = new LinkedList(unsortMap.entrySet());
+
+
+
+        // sort list based on comparator
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry) (o2)).getValue())
+                        .compareTo(((Map.Entry) (o1)).getValue());
+            }
+        });
+
+        // put sorted list into map again
+        //LinkedHashMap make sure order in which keys were inserted
+        HashMap sortedMap = new LinkedHashMap();
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
     }
 
 
