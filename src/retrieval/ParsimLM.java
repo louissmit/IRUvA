@@ -1,14 +1,16 @@
 package retrieval;
 
-import java.util.*;
 
-import indexing.Indexor.*;
+import java.util.*;
+import java.util.HashMap;
+import java.util.TreeMap;
+
 
 import models.IQuery;
 
 public class ParsimLM implements IRetrievalModel{
 	
-	private double lambda = 0.2;
+	private double lambda = 0.001;
     private HashMap <String, Double> PtC = new HashMap <String, Double>();//key: term
     private HashMap <String, HashMap<String,Double>> PtD = new HashMap <String, HashMap<String,Double>>();// key: document,
     //value: term and probability value
@@ -96,7 +98,8 @@ public class ParsimLM implements IRetrievalModel{
         {
             for(String term:this.PtD.get(doc).keySet())
             {
-                double result=this.invIndex.get(term).get(doc)*( lambda*PtD.get(doc).get(term) ) / ( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
+                double result=this.invIndex.get(term).get(doc)*( lambda*PtD.get(doc).get(term) ) /
+                        ( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
                 this.Et.get(doc).put(term,result);
             }
         }
@@ -104,7 +107,7 @@ public class ParsimLM implements IRetrievalModel{
 
     private void CalculateMStep()
     {
-        double sum=0;
+        double sum;
         double oldValue=0;
         double maxDif=0;
         for(String doc:this.Et.keySet())

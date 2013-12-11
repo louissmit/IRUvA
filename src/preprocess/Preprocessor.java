@@ -8,54 +8,36 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
+import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.ext.englishStemmer;
+
 /**
  * @author louissmit
  *
  */
 public class Preprocessor {
-	Stemmer stemmer;
-	LinkedList <String> list = new LinkedList <String>(); 
-	
-	
-	public String[] preprocessQuery(String query){
-		
-		query = Normalizer.normalize(query, Normalizer.Form.NFD); 
-    	query = query.replaceAll("[^\\p{ASCII}]", "");
-    	query = query.toLowerCase();
-    	
-		String OPERATORS = " \\\":()/<>?-_.:;,+*°€'";
-		StringTokenizer queryTokens = new StringTokenizer(query, OPERATORS, true);
-		
-		
-		
-		
-		
-		 while (queryTokens.hasMoreTokens()) {
-		        String token = queryTokens.nextToken();
-		        if (OPERATORS.contains(token))
-		        {}
-		        else{
-		        	stemmer = new Stemmer();
-		        	stemmer.add(token.toCharArray(), token.length());
-		        	stemmer.stem();
-		        	
-		        	token = stemmer.toString();
-		        	
-		        	
-		        	list.add(token);
-		        	
-		        }
-		            
-		    }
-		 
-		 String[] res = new String[list.size()];
-		 int i = 0;
-		 for (String token: list){
-			 res[i] = token;
-			 i++;
-		 }
-		
-		return res;
-	}
-	
+
+
+    private SnowballStemmer stemmer;
+
+    public Preprocessor(){
+        this.stemmer = new englishStemmer();
+    }
+
+    public String[] stem(String[] strings) {
+        String[] result = new String[strings.length];
+        int i = 0;
+        for(String s: strings) {
+            result[i] = this.stem(s);
+            i++;
+        }
+        return result;
+    }
+
+    public String stem(String string) {
+        stemmer.setCurrent(string);
+        stemmer.stem();
+        return stemmer.getCurrent();
+    }
+
 }
