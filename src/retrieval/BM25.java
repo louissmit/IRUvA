@@ -49,8 +49,7 @@ public class BM25 implements IRetrievalModel{
 	
 	
 	
-	
-	@SuppressWarnings("unchecked")
+
 	public static HashMap <String, Double> sort(HashMap <String, Double> unsortMap) {
 		 
 	
