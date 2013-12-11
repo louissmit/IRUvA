@@ -8,7 +8,7 @@ import models.IQuery;
 
 public class ParsimLM implements IRetrievalModel{
 	
-	private double lambda = 0.001;
+	private double lambda = 0.8;
     private HashMap <String, Double> PtC = new HashMap <String, Double>();//key: term
     private HashMap <String, HashMap<String,Double>> PtD = new HashMap <String, HashMap<String,Double>>();// key: document,
     //value: term and probability value
@@ -73,17 +73,22 @@ public class ParsimLM implements IRetrievalModel{
     {
         String [] query=queryObject.getQuery();
         HashMap<String,Double> result=new HashMap<String, Double>();
-
+        double tempPtD;
         for(String doc:PtD.keySet())
         {
-            double score=0;
+            double score=1;
             for(String term:query)
             {
                 if(PtD.get(doc).containsKey(term)&&PtC.containsKey(term))
-                    score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term)+lambda*PtD.get(doc).get(term) );
+                	tempPtD=PtD.get(doc).get(term);
+                else
+                	tempPtD=0;
+               
+                //score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term))+lambda*tempPtD ;
+                score*= ( (1-lambda)*PtC.get(term)+lambda*tempPtD );
             }
-            if(score!=0)
-                result.put(doc, -score);
+            if(score!=1 && score !=0)
+                result.put(doc, score);
         }
         return ParsimLM.sort(result);
     }
