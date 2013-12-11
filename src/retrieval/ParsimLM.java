@@ -17,7 +17,7 @@ public class ParsimLM implements IRetrievalModel{
     private HashMap<String, TreeMap<String, Integer>> invIndex=new HashMap<String, TreeMap<String, Integer>>();//key: term
     //value: doc and occurrences
     public static int maxNumberOfIterations=100;
-    private static double threshold=0.0001;
+    private static double threshold=0.0000001;
     private double currentMaxDiff=2*threshold;
 
 	@Override
@@ -43,7 +43,6 @@ public class ParsimLM implements IRetrievalModel{
             qsum.put(doc,sum);
 		}
         for(String doc: docList.keySet()){
-            double sum=0;
             PtD.put(doc,new HashMap<String, Double>());
             Et.put(doc,new HashMap<String, Double>());
             for(String term: invIndex.keySet())
@@ -56,7 +55,6 @@ public class ParsimLM implements IRetrievalModel{
                 PtC.put(term,probabilityC);
                 PtD.get(doc).put(term,probabilityD);
             }
-            qsum.put(doc,sum);
         }
         for(int i=0;i<maxNumberOfIterations;i++)
         {
