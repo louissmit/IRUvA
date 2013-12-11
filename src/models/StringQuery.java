@@ -1,5 +1,7 @@
 package models;
 
+import preprocess.Preprocessor;
+
 public class StringQuery implements IQuery{
 
 	private String[] query;
@@ -7,7 +9,8 @@ public class StringQuery implements IQuery{
 	
 	public StringQuery(String[] _query,String _queryId)
 	{
-		this.query=_query;
+        Preprocessor pp = new Preprocessor();
+		this.query= pp.stem(_query);
 		this.queryId=_queryId;
 	}
 	@Override

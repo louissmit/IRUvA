@@ -37,18 +37,16 @@ public class Tokenizer {
 		}
 		String OPERATORS = " \\\":()/<>?-_.:;,+*°€'";
 
+        Preprocessor preprocessor = new Preprocessor();
 		for (String st : lines) {
 		    StringTokenizer tokens = new StringTokenizer(st, OPERATORS, true);
 		    while (tokens.hasMoreTokens()) {
 		        String token = tokens.nextToken();
-		        if (OPERATORS.contains(token))
-		        {}
-		        else{
-		        	
+                token = preprocessor.stem(token);
+                if (!OPERATORS.contains(token)) {
 		        	if(!list.containsKey(token)){
 		        		list.put(token, 1);
 		        	}
-		        	
 		        	else{
 		        		list.put(token, list.get(token)+1);
 		        	}

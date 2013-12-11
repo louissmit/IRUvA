@@ -43,16 +43,16 @@ public class Main {
 
         Evaluator eval = new Evaluator("qrels.txt");
 		String ranking = "";
-		for(String document: rank6.keySet()){
-			ranking += "Document: "+document+ ", Score : "+ rank6.get(document) +"\n";
+		for(String document: rank6LM.keySet()){
+			ranking += "Document: "+document+ ", Score : "+ rank6LM.get(document) +"\n";
 		}
 		System.out.println("Statistic for query 6:");
         System.out.println("precision at 30: " + eval.getPrecisionAt(30, query6.getQueryID(), rank6));
 		System.out.println(ranking);
 		
 		ranking = "";		
-		for(String document: rank7.keySet()){
-			ranking += "Document: "+document+ ", Score : "+ rank7.get(document) +"\n";
+		for(String document: rank7LM.keySet()){
+			ranking += "Document: "+document+ ", Score : "+ rank7LM.get(document) +"\n";
 		}
 		System.out.println("Statistic for query 7:");
         System.out.println("precision at 30: " + eval.getPrecisionAt(30, query7.getQueryID(), rank7));
