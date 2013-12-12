@@ -8,7 +8,7 @@ import models.IQuery;
 
 public class ParsimLM implements IRetrievalModel{
 	
-	private double lambda = 0.8;
+	private double lambda = 0.99;
     private HashMap <String, Double> PtC = new HashMap <String, Double>();//key: term
     private HashMap <String, HashMap<String,Double>> PtD = new HashMap <String, HashMap<String,Double>>();// key: document,
     //value: term and probability value
@@ -25,6 +25,7 @@ public class ParsimLM implements IRetrievalModel{
 			HashMap<String, TreeMap<String, Integer>> _invIndex,
 			HashMap<String, Integer> docList, double avgdl) {
 
+		boolean varr=invIndex.containsKey("Narrabri");
 		
 		double csum = 0; //occurrecies of all the terms in the collection
 		HashMap<String,Double> qsum = new HashMap<String, Double>();
@@ -74,7 +75,7 @@ public class ParsimLM implements IRetrievalModel{
         double tempPtD;
         for(String doc:PtD.keySet())
         {
-            double score=1;
+            double score=0;
             for(String term:query)
             {
                 if(PtD.get(doc).containsKey(term)&&PtC.containsKey(term))
@@ -82,10 +83,10 @@ public class ParsimLM implements IRetrievalModel{
                 else
                 	tempPtD=0;
                
-                //score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term))+lambda*tempPtD ;
-                score*= ( (1-lambda)*PtC.get(term)+lambda*tempPtD );
+                score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term)+lambda*tempPtD) ;
+                //score*= ( (1-lambda)*PtC.get(term)+lambda*tempPtD );
             }
-            if(score!=1 && score !=0)
+            if( score >=-15 )
                 result.put(doc, score);
         }
         return ParsimLM.sort(result);
