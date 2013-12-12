@@ -72,18 +72,23 @@ public class ParsimLM implements IRetrievalModel{
     {
         String [] query=queryObject.getQuery();
         HashMap<String,Double> result=new HashMap<String, Double>();
-        double tempPtD;
+        double tempPtD,tempPtC;
         for(String doc:PtD.keySet())
         {
             double score=0;
             for(String term:query)
             {
-                if(PtD.get(doc).containsKey(term)&&PtC.containsKey(term))
+                if(PtD.get(doc).containsKey(term))
                 	tempPtD=PtD.get(doc).get(term);
                 else
                 	tempPtD=0;
+                
+                if(PtC.containsKey(term))
+                	tempPtC=PtC.get(term);
+                else
+                	tempPtC=0;
                
-                score+=(1 / (double)query.length) * Math.log( (1-lambda)*PtC.get(term)+lambda*tempPtD) ;
+                score+=(1 / (double)query.length) * Math.log( (1-lambda)*tempPtC+lambda*tempPtD) ;
                 //score*= ( (1-lambda)*PtC.get(term)+lambda*tempPtD );
             }
             if( score >=-15 )
