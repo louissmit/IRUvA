@@ -3,6 +3,8 @@ package main;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import preprocess.Tokenizer;
+
 import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
 
 import evaluation.Evaluator;
@@ -20,8 +22,11 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		String line="sustainable ecosystems";
-		String [] queryStrings= line.split(" ");
+		String line="sustainable Lillia";
+		String [] queryStrings= Tokenizer.tokenizeQuery(line);
+		for(String s: queryStrings){
+			System.out.println(s);
+		}
 		String queryId="6";
 		IQuery query6=new StringQuery(queryStrings,queryId);
 		

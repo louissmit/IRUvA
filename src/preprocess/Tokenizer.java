@@ -7,13 +7,17 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Tokenizer {
 	
-	HashMap <String, Integer> list = new HashMap <String, Integer>(); 
+	
 	
 	public HashMap <String, Integer> tokenize(String filename) {
+		HashMap <String, Integer> list = new HashMap <String, Integer>(); 
 		 File file = new File("src/Docs/"+filename);
 		  ArrayList <String> lines = new ArrayList <String>();
 		  
@@ -35,7 +39,7 @@ public class Tokenizer {
 		  catch(IOException e){
 		    System.exit(0);
 		}
-		String OPERATORS = " \\\":()/<>?-_.:;,+*°€'";
+		String OPERATORS = " \\\":()/<>?-_.:;,+*°€='";
 
         Preprocessor preprocessor = new Preprocessor();
 		for (String st : lines) {
@@ -59,6 +63,33 @@ public class Tokenizer {
 		return list;
 		   }
 
-
+	public static String[] tokenizeQuery(String s){
+		
+		 Set <String> list = new HashSet <String>();
+		 s = Normalizer.normalize(s, Normalizer.Form.NFD); 
+	     s = s.replaceAll("[^\\p{ASCII}]", "");//removing diatrics
+	     s = s.toLowerCase();
+		 String OPERATORS = " \\\":()/<>?-_.:;,+*°€'+";
+		    StringTokenizer tokens = new StringTokenizer(s, OPERATORS, true);
+		    
+		    while (tokens.hasMoreTokens()) {
+		        String token = tokens.nextToken();
+		       
+		        if(!token.equals(" ")) 
+		        list.add(token);
+		        
+		           
+		    
+		   }
+		    
+		String[] arr = new String[list.size()];
+		
+		int i = 0;
+		for (String st: list){
+			arr[i] = st;
+			i++;		
+		}
+		return arr;
+	}
 	
 }
