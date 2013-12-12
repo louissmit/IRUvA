@@ -63,33 +63,39 @@ public class Tokenizer {
 		return list;
 		   }
 
-	public static String[] tokenizeQuery(String s){
+public static String[] tokenizeQuery(String query){
+	
+		LinkedList <String> list = new LinkedList<String>();
 		
-		 Set <String> list = new HashSet <String>();
-		 s = Normalizer.normalize(s, Normalizer.Form.NFD); 
-	     s = s.replaceAll("[^\\p{ASCII}]", "");//removing diatrics
-	     s = s.toLowerCase();
-		 String OPERATORS = " \\\":()/<>?-_.:;,+*°€'+";
-		    StringTokenizer tokens = new StringTokenizer(s, OPERATORS, true);
-		    
-		    while (tokens.hasMoreTokens()) {
-		        String token = tokens.nextToken();
-		       
-		        if(!token.equals(" ")) 
-		        list.add(token);
-		        
-		           
-		    
-		   }
-		    
-		String[] arr = new String[list.size()];
+		query = Normalizer.normalize(query, Normalizer.Form.NFD); 
+    	query = query.replaceAll("[^\\p{ASCII}]", "");
+    	query = query.toLowerCase();
+    	
+		String OPERATORS = " \\\":()/<>?-_.:;,+*°€'!|�$%&*";
+		StringTokenizer queryTokens = new StringTokenizer(query, OPERATORS, true);
 		
-		int i = 0;
-		for (String st: list){
-			arr[i] = st;
-			i++;		
-		}
-		return arr;
+		
+		
+		
+		
+		 while (queryTokens.hasMoreTokens()) {
+		        String token = queryTokens.nextToken();
+		        if (!OPERATORS.contains(token)){
+		        	
+		         list.add(token);
+		        	
+		        }
+		            
+		    }
+		 
+		 String[] res = new String[list.size()];
+		 int i = 0;
+		 for (String token: list){
+			 res[i] = token;
+			 i++;
+		 }
+		
+		return res;
 	}
 	
 }

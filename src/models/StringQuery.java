@@ -1,16 +1,18 @@
 package models;
 
 import preprocess.Preprocessor;
+import preprocess.Tokenizer;
 
 public class StringQuery implements IQuery{
 
 	private String[] query;
 	private String queryId;
 	
-	public StringQuery(String[] _query,String _queryId)
+	public StringQuery(String _query,String _queryId)
 	{
         Preprocessor pp = new Preprocessor();
-		this.query= pp.stem(_query);
+        String [] tempQuery = Tokenizer.tokenizeQuery(_query);
+		this.query= pp.stem(tempQuery);
 		this.queryId=_queryId;
 	}
 	@Override
