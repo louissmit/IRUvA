@@ -91,10 +91,19 @@ public class ParsimLM implements IRetrievalModel{
                 score+=(1 / (double)query.length) * Math.log( (1-lambda)*tempPtC+lambda*tempPtD) ;
                 //score*= ( (1-lambda)*PtC.get(term)+lambda*tempPtD );
             }
-            if( score >=-15 )
+            if( score!=0 )
                 result.put(doc, score);
         }
-        return ParsimLM.sort(result);
+        HashMap<String,Double> cuttedResults=new HashMap<String,Double>();
+        result=ParsimLM.sort(result);
+        int iterator=0;
+        for(String key:result.keySet())
+        {
+        	iterator++;
+        	if(iterator<=100)
+        		cuttedResults.put(key,result.get(key));
+        }
+        return ParsimLM.sort(cuttedResults);
     }
 
     private void CalculateEStep()

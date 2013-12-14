@@ -71,7 +71,7 @@ public static String[] tokenizeQuery(String query){
     	query = query.replaceAll("[^\\p{ASCII}]", "");
     	query = query.toLowerCase();
     	
-		String OPERATORS = " \\\":()/<>?-_.:;,+*°€'!|�$%&*";
+		String OPERATORS = " \\\":()/<>?-_.:;,+*°€'!|�$%&*";
 		StringTokenizer queryTokens = new StringTokenizer(query, OPERATORS, true);
 		
 		

@@ -36,6 +36,7 @@ public class Preprocessor {
     public String stem(String string) {
         stemmer.setCurrent(string);
         stemmer.stem();
+        //return string;
         return stemmer.getCurrent();
     }
 
