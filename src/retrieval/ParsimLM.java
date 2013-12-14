@@ -25,7 +25,7 @@ public class ParsimLM implements IRetrievalModel{
 			HashMap<String, TreeMap<String, Integer>> _invIndex,
 			HashMap<String, Integer> docList, double avgdl) {
 
-		boolean varr=invIndex.containsKey("Narrabri");
+
 		
 		double csum = 0; //occurrecies of all the terms in the collection
 		HashMap<String,Double> qsum = new HashMap<String, Double>();
