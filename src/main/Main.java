@@ -36,7 +36,7 @@ public class Main {
         IRetrievalModel retrievalModelLM=new ParsimLM();
 		QueryProcessing queryProcessing=new QueryProcessing(retrievalModel, docPath);
         QueryProcessing queryProcessingLM=new QueryProcessing(retrievalModelLM, docPath);
-
+        System.out.println("Files Loaded");
 		HashMap <String, Double> rank6 = queryProcessing.CalculateAndSaveToFileRank(query6, "output6.txt");
 		HashMap <String, Double> rank7 = queryProcessing.CalculateAndSaveToFileRank(query7, "output7.txt");
 
@@ -44,6 +44,7 @@ public class Main {
         HashMap <String, Double> rank7LM = queryProcessingLM.CalculateAndSaveToFileRank(query7, "output7LM.txt");
 
         Evaluator eval = new Evaluator("qrels.txt");
+        /*
 		String ranking = "";
 		for(String document: rank6LM.keySet()){
 			ranking += "Document: "+document+ ", Score : "+ rank6LM.get(document) +"\n";
@@ -59,7 +60,7 @@ public class Main {
 		System.out.println("Statistic for query 7:");
         System.out.println("precision at 30: " + eval.getPrecisionAt(30, query7.getQueryID(), rank7));
 		System.out.println(ranking);
-		
+		*/
 		queryProcessing.PrintStatistics();
 
         System.out.println("Precision for query 6 for BM25, top20: "+eval.getPrecisionAt(20,query6.getQueryID(),rank6));
@@ -67,7 +68,7 @@ public class Main {
 
         System.out.println("Precision for query 7 for BM25, top20: "+eval.getPrecisionAt(20,query7.getQueryID(),rank7));
         System.out.println("Precision for query 7 for LM, top20: "+eval.getPrecisionAt(20,query7.getQueryID(),rank7LM));
-		
+        System.out.println("Rankings of documents were saved to files");
 		
 	/*for(String token: invIndex.keySet()){
 			

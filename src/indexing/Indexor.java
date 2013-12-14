@@ -47,7 +47,7 @@ public class Indexor {
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		
-		System.out.println("Loaded "+listOfFiles.length+" files.");
+		//System.out.println("Loaded "+listOfFiles.length+" files.");
 	   
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
