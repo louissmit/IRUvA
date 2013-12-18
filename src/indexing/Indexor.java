@@ -13,7 +13,7 @@ public class Indexor {
 	private HashMap <String, Integer> docList = new HashMap <String, Integer> (); // documentID, number of terms in the document;
 	private HashMap <String, TreeMap <String, Integer>> invIndex = new HashMap <String, TreeMap <String, Integer>> ();
 	HashMap <String, Integer> counts = null;
-	private double avgLength = 0; // average lenght of the documents in the collecton
+	private double avgLength = 0; // average length of the documents in the collection
 	
 	public double getAvgLength() {
 		return avgLength;
@@ -47,11 +47,9 @@ public class Indexor {
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		
-		//System.out.println("Loaded "+listOfFiles.length+" files.");
 	   
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		    	//System.out.println(file.getName());
 		    	Tokenizer t = new Tokenizer();
 		    	counts = t.tokenize(file.getName());
 		    	
@@ -73,22 +71,10 @@ public class Indexor {
 		    }
 		    
 		    
-		    
 		}
 		
 		avgLength = sum / listOfFiles.length;
 		
-		/*for(String token: invIndex.keySet()){
-			
-			System.out.println(token+":");
-			
-			for (String doc : invIndex.get(token).keySet()){
-				System.out.print(doc+":"+invIndex.get(token).get(doc)+", ");
-			}
-			
-			System.out.println("");
-			
-		}*/
 		
 		return invIndex;
 	}

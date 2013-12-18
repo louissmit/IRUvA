@@ -15,7 +15,7 @@ import models.IQuery;
 public class BM25 implements IRetrievalModel{
 	
 	public final float k1 = 1.5f;
-	public final float b = 0.75f;
+	public final float b = 0.5f;
 	
 	
 	public HashMap <String, Double> getRanking(IQuery queryObject, HashMap <String, TreeMap <String, Integer>> invIndex, HashMap <String, Integer> docList, double avgdl){

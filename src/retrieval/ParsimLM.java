@@ -27,7 +27,7 @@ public class ParsimLM implements IRetrievalModel{
 
 
 		
-		double csum = 0; //occurrecies of all the terms in the collection
+		double csum = 0; //occurrences of all the terms in the collection
 		HashMap<String,Double> qsum = new HashMap<String, Double>();
         this.invIndex=_invIndex;
 		
@@ -88,8 +88,8 @@ public class ParsimLM implements IRetrievalModel{
                 else
                 	tempPtC=0;
                
-                score+=(1 / (double)query.length) * Math.log( (1-lambda)*tempPtC+lambda*tempPtD) ;
-                //score*= ( (1-lambda)*PtC.get(term)+lambda*tempPtD );
+                if(tempPtC!=0)
+                	score+=(1 / (double)query.length) * Math.log( (1-lambda)*tempPtC+lambda*tempPtD) ;
             }
             if( score!=0 )
                 result.put(doc, score);
